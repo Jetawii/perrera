@@ -420,18 +420,11 @@ public class Perrera {
         File fichero = new File("mascotas.info");
         ObjectOutputStream s = null;
         try {
-            //  FileOutputStream flujo de salida para 
-            //  escribir info sin procesar. Para escribir 
-            //  secuencias de caracteres use FileWriter. 
+            // FileOutputStream flujo de salida para escribir info sin procesar. 
+            // Para escribir secuencias de caracteres use FileWriter. 
             FileOutputStream f = new FileOutputStream(fichero);
             // ObjectOutputStream los objetos se pueden leer. 
             s = new ObjectOutputStream(f);
-            // Recorremos nuestro mapa
-//              for (Mascota mascota : mapa.values()) {
-//                // Introducimos los objetos del mapa dentro del fichero. 
-//                // VOLCAMOS LA COLECCIÓN 
-//                s.writeObject(mascota);
-//              }
             s.writeObject(mapa);
             // IOException es la clase base para excepciones 
             // que se producen usando archivos, directorios o secuencias. 
@@ -453,13 +446,12 @@ public class Perrera {
         try{
             FileInputStream f = new FileInputStream(fichero);
             s = new ObjectInputStream(f);
-//            br=new BufferedReader(new FileReader(fichero));
+            // Creas un mapa donde se archiva la información del fichero. 
             HashMap<String, Mascota> mapInFile=(HashMap<String,Mascota>)s.readObject();
-            // imprimir toda la info del mapa
-            for(Map.Entry<String,Mascota> m:mapInFile.entrySet()){
-                System.out.println(m.getKey()+" : "+ m.getValue());
+            // Imprimir toda la info del mapa
+            for (String identificador : mapInFile.keySet()) {
+                    mapInFile.get(identificador).mostrarMascota();
             }
-            
         }catch (IOException e){
             System.out.println("Mensaje de la excepción: " + e.getMessage());
         } catch (ClassNotFoundException ex){
