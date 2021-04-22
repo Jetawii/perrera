@@ -8,6 +8,7 @@ package perrera;
 // Importamos la clase de HashMap
 import java.io.*;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -453,7 +454,12 @@ public class Perrera {
             FileInputStream f = new FileInputStream(fichero);
             s = new ObjectInputStream(f);
 //            br=new BufferedReader(new FileReader(fichero));
-            mapa=(HashMap)s.readObject();
+            HashMap<String, Mascota> mapInFile=(HashMap<String,Mascota>)s.readObject();
+            // imprimir toda la info del mapa
+            for(Map.Entry<String,Mascota> m:mapInFile.entrySet()){
+                System.out.println(m.getKey()+" : "+ m.getValue());
+            }
+            
         }catch (IOException e){
             System.out.println("Mensaje de la excepción: " + e.getMessage());
         } catch (ClassNotFoundException ex){
