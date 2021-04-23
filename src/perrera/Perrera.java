@@ -8,7 +8,6 @@ package perrera;
 // Importamos la clase de HashMap
 import java.io.*;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 /**
