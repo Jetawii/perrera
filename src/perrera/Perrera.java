@@ -15,6 +15,9 @@ import java.util.Scanner;
  * @author ycoz
  */
 public class Perrera {
+    
+    // CONSTANTE
+    public static String RUTA = "mascotas.txt";
 
     public static void main(String[] args) {
         // Creamos el HashMap y lo llamamos mapa 
@@ -416,15 +419,20 @@ public class Perrera {
     public static void escribirFichero(HashMap<String, Mascota> mapa) {
         // Primero debemos leer el fichero antes de escribir nada en él.
         // Creamos un objeto fichero
-        File fichero = new File("mascotas.info");
+//        File fichero = new File("mascotas.info");
         ObjectOutputStream s = null;
         try {
-            // FileOutputStream flujo de salida para escribir info sin procesar. 
+            // FileOutputStream sirve para escribir tipos de datos sin procesar, como un objeto. 
             // Para escribir secuencias de caracteres use FileWriter. 
-            FileOutputStream f = new FileOutputStream(fichero);
-            // ObjectOutputStream los objetos se pueden leer. 
+            // Esta parte convierte el objeto a datos de carácter primitivo.
+            // append - true, los bytes se escribirán al final del archivo en lugar de al principio.
+            FileOutputStream f = new FileOutputStream(RUTA, true);
+            // Y esta parte puede hacer cosas con esos datos primitivos como escribir o leerlos. 
+            // ObjectOutputStream te permite escribir tipos de datos primitivos. 
+            // Y también te permite leer ese tipo de dato primitivo. 
             s = new ObjectOutputStream(f);
             s.writeObject(mapa);
+            
             // IOException es la clase base para excepciones 
             // que se producen usando archivos, directorios o secuencias. 
         } catch (IOException ex) {
