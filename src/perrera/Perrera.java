@@ -15,9 +15,9 @@ import java.util.Scanner;
  * @author ycoz
  */
 public class Perrera {
-    
+
     // CONSTANTE
-    public static String RUTA = "mascotas.txt";
+    public static String RUTA = "mascotas.info";
 
     public static void main(String[] args) {
         // Creamos el HashMap y lo llamamos mapa 
@@ -420,19 +420,21 @@ public class Perrera {
         // Primero debemos leer el fichero antes de escribir nada en él.
         // Creamos un objeto fichero
 //        File fichero = new File("mascotas.info");
+        File fichero = new File(RUTA);
         ObjectOutputStream s = null;
+        FileOutputStream f=null;
         try {
             // FileOutputStream sirve para escribir tipos de datos sin procesar, como un objeto. 
             // Para escribir secuencias de caracteres use FileWriter. 
             // Esta parte convierte el objeto a datos de carácter primitivo.
             // append - true, los bytes se escribirán al final del archivo en lugar de al principio.
-            FileOutputStream f = new FileOutputStream(RUTA, true);
+            f = new FileOutputStream(fichero);
             // Y esta parte puede hacer cosas con esos datos primitivos como escribir o leerlos. 
             // ObjectOutputStream te permite escribir tipos de datos primitivos. 
             // Y también te permite leer ese tipo de dato primitivo. 
             s = new ObjectOutputStream(f);
             s.writeObject(mapa);
-            
+
             // IOException es la clase base para excepciones 
             // que se producen usando archivos, directorios o secuencias. 
         } catch (IOException ex) {
@@ -440,6 +442,7 @@ public class Perrera {
         } finally {
             // Cerramos el fichero se haya escrito la info o no. 
             try {
+                f.close();
                 s.close();
             } catch (IOException ex2) {
                 System.out.println("Mensaje de la excepción: " + ex2.getMessage());
@@ -448,24 +451,26 @@ public class Perrera {
     }
 
     public static void leerFichero(HashMap<String, Mascota> mapa) {
-        File fichero= new File ("mascotas.info");
+        File fichero = new File(RUTA);
         ObjectInputStream s = null;
-        try{
-            FileInputStream f = new FileInputStream(fichero);
+        FileInputStream f =null;
+        try {
+            f = new FileInputStream(fichero);
             s = new ObjectInputStream(f);
             // Creas un mapa donde se archiva la información del fichero. 
-            HashMap<String, Mascota> mapInFile=(HashMap<String,Mascota>)s.readObject();
+            HashMap<String, Mascota> mapInFile = (HashMap<String, Mascota>) s.readObject();
             // Imprimir toda la info del mapa
             for (String identificador : mapInFile.keySet()) {
-                    mapInFile.get(identificador).mostrarMascota();
+                mapInFile.get(identificador).mostrarMascota();
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             System.out.println("Mensaje de la excepción: " + e.getMessage());
-        } catch (ClassNotFoundException ex){
+        } catch (ClassNotFoundException ex) {
             System.out.println("Mensaje de la excepción: " + ex.getMessage());
-        }finally {
+        } finally {
             // Cerramos el fichero se haya escrito la info o no. 
             try {
+                f.close();
                 s.close();
             } catch (IOException ex2) {
                 System.out.println("Mensaje de la excepción: " + ex2.getMessage());
