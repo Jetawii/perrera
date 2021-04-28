@@ -19,12 +19,12 @@ public class Perrera {
     // CONSTANTE
     public static String RUTA = "mascotas.info";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException {
         // Creamos el HashMap y lo llamamos mapa 
-        HashMap<String, Mascota> mapa = new HashMap<String, Mascota>();
+        HashMap<String, Mascota> mapa = null;
+        leerFichero(mapa);
         Scanner sc = new Scanner(System.in);
         boolean salir = false;
-        leerFichero(mapa);
         do {
             System.out.println("1. Añadir mascota.");
             System.out.println("2. Visualizar listado de mascotas.");
@@ -39,8 +39,6 @@ public class Perrera {
             switch (opcion) {
                 case "1":
                     introducirMascotas(mapa);
-                    // Método escribir fichero. 
-                    escribirFichero(mapa);
                     break;
                 case "2":
                     mostrarMascotas(mapa);
@@ -62,7 +60,7 @@ public class Perrera {
                     System.out.println("Nos vemos pronto :)");
                     break;
                 default:
-                    System.out.println("Solo números del 1 al 4.");
+                    System.out.println("Solo números del 1 al 7.");
             }
         } while (!salir);
     }
@@ -417,12 +415,11 @@ public class Perrera {
     }
 
     public static void escribirFichero(HashMap<String, Mascota> mapa) {
-        // Primero debemos leer el fichero antes de escribir nada en él.
         // Creamos un objeto fichero
-//        File fichero = new File("mascotas.info");
+        //File fichero = new File("mascotas.info");
         File fichero = new File(RUTA);
         ObjectOutputStream s = null;
-        FileOutputStream f=null;
+        FileOutputStream f = null;
         try {
             // FileOutputStream sirve para escribir tipos de datos sin procesar, como un objeto. 
             // Para escribir secuencias de caracteres use FileWriter. 
@@ -433,8 +430,15 @@ public class Perrera {
             // ObjectOutputStream te permite escribir tipos de datos primitivos. 
             // Y también te permite leer ese tipo de dato primitivo. 
             s = new ObjectOutputStream(f);
-            s.writeObject(mapa);
 
+            // Si en lugar de escribir el mapa entero. Escribo cada uno de los objetos uno por uno. 
+            // Solo tendría que añadir objeto a objeto. 
+            for (Mascota mascota : mapa.values()) {
+                s.writeObject(mascota);
+            }
+
+            // Aquí escribimos el mapa entero. 
+            // s.writeObject(mapa);
             // IOException es la clase base para excepciones 
             // que se producen usando archivos, directorios o secuencias. 
         } catch (IOException ex) {
@@ -450,27 +454,42 @@ public class Perrera {
         }
     }
 
-    public static void leerFichero(HashMap<String, Mascota> mapa) {
+    public static void leerFichero(HashMap<String, Mascota> mapa) throws ClassNotFoundException {
+        // Creamos un objeto fichero
+        //File fichero = new File("mascotas.info");
         File fichero = new File(RUTA);
         ObjectInputStream s = null;
-        FileInputStream f =null;
+        FileInputStream f = null;
         try {
             f = new FileInputStream(fichero);
             s = new ObjectInputStream(f);
             // Creas un mapa donde se archiva la información del fichero. 
-            HashMap<String, Mascota> mapInFile = (HashMap<String, Mascota>) s.readObject();
-            // Imprimir toda la info del mapa
-            for (String identificador : mapInFile.keySet()) {
-                mapInFile.get(identificador).mostrarMascota();
-            }
+            // HashMap<String, Mascota> mapInFile = (HashMap<String, Mascota>) s.readObject();
+            // Imprimir toda la info del mapa.  
+            // for (String identificador : mapInFile.keySet()) {
+            //      mapInFile.get(identificador).mostrarMascota();
+            // }
+
+            // Creamos un objeto auxiliar
+            // donde almacenaremos cada objeto. 
+            Object aux =null;
+
+            // Mientras queden objetos por leer.
+            do{
+                aux = s.readObject();
+                if (aux instanceof Mascota){
+                    // Casting en castellano casteo ((Mascota)aux).
+                    String identificador=((Mascota) aux).getIdentificador();
+                    mapa.put(identificador, (Mascota) aux);
+//                    aux = s.readObject();
+                }
+            }while (aux != null);
+            
         } catch (IOException e) {
             System.out.println("Mensaje de la excepción: " + e.getMessage());
-        } catch (ClassNotFoundException ex) {
-            System.out.println("Mensaje de la excepción: " + ex.getMessage());
         } finally {
             // Cerramos el fichero se haya escrito la info o no. 
             try {
-                f.close();
                 s.close();
             } catch (IOException ex2) {
                 System.out.println("Mensaje de la excepción: " + ex2.getMessage());
