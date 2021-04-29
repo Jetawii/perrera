@@ -21,7 +21,7 @@ public class Perrera {
 
     public static void main(String[] args) throws ClassNotFoundException {
         // Creamos el HashMap y lo llamamos mapa 
-        HashMap<String, Mascota> mapa = null;
+        HashMap<String, Mascota> mapa= new HashMap<String, Mascota>();
         leerFichero(mapa);
         Scanner sc = new Scanner(System.in);
         boolean salir = false;
@@ -426,15 +426,17 @@ public class Perrera {
             // Esta parte convierte el objeto a datos de carácter primitivo.
             // append - true, los bytes se escribirán al final del archivo en lugar de al principio.
             f = new FileOutputStream(fichero);
+            
             // Y esta parte puede hacer cosas con esos datos primitivos como escribir o leerlos. 
             // ObjectOutputStream te permite escribir tipos de datos primitivos. 
             // Y también te permite leer ese tipo de dato primitivo. 
             s = new ObjectOutputStream(f);
+            Object aux;
 
             // Si en lugar de escribir el mapa entero. Escribo cada uno de los objetos uno por uno. 
             // Solo tendría que añadir objeto a objeto. 
             for (Mascota mascota : mapa.values()) {
-                s.writeObject(mascota);
+                
             }
 
             // Aquí escribimos el mapa entero. 
